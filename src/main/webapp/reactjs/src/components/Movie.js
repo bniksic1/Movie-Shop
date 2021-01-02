@@ -58,7 +58,7 @@ const Movie = () => {
     return (
         <div>
             <MovieToast
-                children={{show: toastShowState, message: "Movie Added Successfully."}}
+                children={{show: toastShowState, message: "Movie Added Successfully.", type: "success"}}
             />
 
             <Card className="bg-dark text-white border border-dark">

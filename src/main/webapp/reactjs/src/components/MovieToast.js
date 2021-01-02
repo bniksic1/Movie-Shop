@@ -12,8 +12,8 @@ const MovieToast = (props) => {
 
     return (
         <div style={toastCss}>
-            <Toast show={props.children.show} className="border border-success bg-success text-white">
-                <Toast.Header closeButton={false} className="bg-success text-white">
+            <Toast show={props.children.show} className={props.children.type === "success" ? "border border-success bg-success text-white" : "border border-danger bg-danger text-white"}>
+                <Toast.Header closeButton={false} className={props.children.type === "success" ? "bg-success text-white" : "bg-danger text-white"}>
                     <strong className="mx-auto">Success</strong>
                 </Toast.Header>
                 <Toast.Body>
