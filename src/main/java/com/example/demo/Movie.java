@@ -1,10 +1,10 @@
 package com.example.demo;
 
 public class Movie {
-    private Integer id, rating;
-    private String title, genre, dateRelease, description, imgCoverLink, director, runtime;
+    private Integer id, rating, runtime;
+    private String title, genre, dateRelease, description, imgCoverLink, director;
 
-    public Movie(Integer id, String title,String genre, Integer rating, String director, String runtime, String dateRelease, String description, String imgCoverLink) {
+    public Movie(Integer id, String title,String genre, Integer rating, String director, Integer runtime, String dateRelease, String description, String imgCoverLink) {
         this.id = id;
         this.rating = rating;
         this.title = title;
@@ -80,11 +80,11 @@ public class Movie {
         this.director = director;
     }
 
-    public String getRuntime() {
+    public Integer getRuntime() {
         return runtime;
     }
 
-    public void setRuntime(String runtime) {
+    public void setRuntime(Integer runtime) {
         this.runtime = runtime;
     }
 }

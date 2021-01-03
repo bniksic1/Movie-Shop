@@ -20,11 +20,12 @@ function App() {
         <Router>
             <NavigationBar/>
             <Container>
-                <Row>
+                <Row className="mb-lg-5">
                     <Col lg={12} style={marginTop}>
                         <Switch>
                             <Route path="/list" component={MovieList}/>
                             <Route path="/add" component={Movie}/>
+                            <Route path="/edit/:id" component={Movie}/>
                             <Route path="/" component={Welcome}/>
                         </Switch>
                     </Col>

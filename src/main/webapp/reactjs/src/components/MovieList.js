@@ -5,6 +5,7 @@ import {Button, ButtonGroup, Card, Image, Table} from "react-bootstrap"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faList, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons"
 import MovieToast from "./MovieToast";
+import {Link} from "react-router-dom";
 
 const MovieList = () => {
 
@@ -34,7 +35,9 @@ const MovieList = () => {
     return (
         <div>
             <MovieToast
-                children={{show: showToastState, message: "Movie Deleted Successfully.", type: "danger"}}
+                show={showToastState}
+                message={ "Movie Deleted Successfully."}
+                type={ "danger"}
             />
             <Card className="bg-dark text-white border border-dark">
                 <Card.Header>
@@ -77,7 +80,7 @@ const MovieList = () => {
                                         <td>{movie.runtime}</td>
                                         <td>
                                             <ButtonGroup>
-                                                <Button size="sm" variant="outline-primary" className="mr-2"><FontAwesomeIcon icon={faEdit} /></Button>
+                                                <Link to={"edit/" + movie.id} className="btn btn-sm btn-outline-primary mr-2"><FontAwesomeIcon icon={faEdit} /></Link>
                                                 <Button size="sm" variant="outline-danger" onClick={onClickDeleteMovie.bind(this, movie.id)}><FontAwesomeIcon icon={faTrash} /></Button>
                                             </ButtonGroup>
                                         </td>

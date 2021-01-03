@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios'
 
 import "./Movie.css"
@@ -6,11 +6,13 @@ import "./Movie.css"
 
 import {Card, Form, Button, Col} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlusSquare, faSave, faUndo} from "@fortawesome/free-solid-svg-icons";
+import {faList, faPlusSquare, faSave, faUndo, faEdit} from "@fortawesome/free-solid-svg-icons";
 import MovieToast from "./MovieToast";
+import {Link} from "react-router-dom";
 
-const Movie = () => {
+const Movie = (props) => {
     const initialState = {
+        id: "",
         title: "",
         genre: "",
         imgCoverLink: "",
@@ -31,13 +33,52 @@ const Movie = () => {
         dateRelease: state.dateRelease,
         description: state.description,
         director: state.director,
-        runtime: state.runtime + " min",
+        runtime: state.runtime,
         rating: state.rating
     }
+
+    useEffect(() => {
+        const movieId = +props.match.params.id
+        axios.get("http://localhost:8080/api/movies/" + movieId)
+            .then(res => res.data)
+            .then(data => {
+                if (data != null) {
+                    setState(data)
+                }
+            })
+            .catch(() => {
+                setState(initialState)
+            })
+    }, [props.match.params.id])
 
     const submitMovie = ev => {
         ev.preventDefault()
         axios.post("http://localhost:8080/api/movies", movie)
+            .then(res => {
+                if (res.data != null) {
+                    setToastShowState(true);
+                    setTimeout(() => setToastShowState(false), 3000)
+                }
+            })
+        resetMovie()
+    }
+
+    const updateMovie = ev => {
+        ev.preventDefault()
+
+        const putMovie = {
+            id: state.id,
+            title: state.title,
+            genre: state.genre,
+            imgCoverLink: state.imgCoverLink,
+            dateRelease: state.dateRelease,
+            description: state.description,
+            director: state.director,
+            runtime: state.runtime,
+            rating: state.rating
+        }
+
+        axios.put("http://localhost:8080/api/movies/" + putMovie.id, putMovie)
             .then(res => {
                 if (res.data != null) {
                     setToastShowState(true);
@@ -58,13 +99,15 @@ const Movie = () => {
     return (
         <div>
             <MovieToast
-                children={{show: toastShowState, message: "Movie Added Successfully.", type: "success"}}
+                show={toastShowState}
+                message= {"Movie Saved Successfully."}
+                type={ "success"}
             />
 
             <Card className="bg-dark text-white border border-dark">
-            <Form onReset={resetMovie} onSubmit={submitMovie} id="movieFormId">
+            <Form onReset={resetMovie} onSubmit={state.id !== "" ? updateMovie : submitMovie} id="movieFormId">
                 <Card.Header>
-                    <FontAwesomeIcon className="mr-2" icon={faPlusSquare}/>Add movie
+                    <FontAwesomeIcon className="mr-2" icon={state.id !== "" ? faEdit : faPlusSquare}/>{state.id !== "" ? "Update Movie" : "Add New Movie"}
                 </Card.Header>
                 <Card.Body>
 
@@ -189,11 +232,16 @@ const Movie = () => {
                 </Card.Body>
                 <Card.Footer style={{textAlign: "right"}}>
                     <Button size="sm" variant="outline-success" type="submit" className="mr-2">
-                        <FontAwesomeIcon className="mr-2" icon={faSave}/>Submit
+                        <FontAwesomeIcon className="mr-2" icon={faSave}/>{state.id !== "" ? "Update" : "Save"}
                     </Button>
-                    <Button size="sm" variant="outline-info" type="reset">
+                    <Button size="sm" variant="outline-info" type="reset" className="mr-2">
                         <FontAwesomeIcon className="mr-2" icon={faUndo}/>Reset
                     </Button>
+                    <Link to={"/list"}>
+                        <Button size="sm" variant="outline-info" type="reset">
+                            <FontAwesomeIcon className="mr-2" icon={faList}/>Movie List
+                        </Button>
+                    </Link>
                 </Card.Footer>
             </Form>
         </Card>

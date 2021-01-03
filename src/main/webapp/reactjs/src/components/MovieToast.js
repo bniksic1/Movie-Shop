@@ -12,12 +12,12 @@ const MovieToast = (props) => {
 
     return (
         <div style={toastCss}>
-            <Toast show={props.children.show} className={props.children.type === "success" ? "border border-success bg-success text-white" : "border border-danger bg-danger text-white"}>
-                <Toast.Header closeButton={false} className={props.children.type === "success" ? "bg-success text-white" : "bg-danger text-white"}>
+            <Toast show={props.show} className={props.type === "success" ? "border border-success bg-success text-white" : "border border-danger bg-danger text-white"}>
+                <Toast.Header closeButton={false} className={props.type === "success" ? "bg-success text-white" : "bg-danger text-white"}>
                     <strong className="mx-auto">Success</strong>
                 </Toast.Header>
                 <Toast.Body>
-                    {props.children.message}
+                    {props.message}
                 </Toast.Body>
             </Toast>
         </div>
