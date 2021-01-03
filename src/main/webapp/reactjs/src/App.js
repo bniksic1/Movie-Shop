@@ -9,6 +9,7 @@ import Welcome from "./components/Welcome";
 import Footer from "./components/Footer";
 import Movie from "./components/Movie";
 import MovieList from "./components/MovieList";
+import UserList from "./components/UserList";
 
 
 function App() {
@@ -23,9 +24,10 @@ function App() {
                 <Row className="mb-lg-5">
                     <Col lg={12} style={marginTop}>
                         <Switch>
+                            <Route path="/edit/:id" component={Movie}/>
                             <Route path="/list" component={MovieList}/>
                             <Route path="/add" component={Movie}/>
-                            <Route path="/edit/:id" component={Movie}/>
+                            <Route path="/users" component={UserList}/>
                             <Route path="/" component={Welcome}/>
                         </Switch>
                     </Col>

@@ -20,6 +20,9 @@ const NavigationBar = () => {
                 <Link to={"/list"} className="nav-link">
                     Movie List
                 </Link>
+                <Link to={"/users"} className="nav-link">
+                    User List
+                </Link>
             </Nav>
             <Form inline>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" />
