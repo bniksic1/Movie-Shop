@@ -13,16 +13,12 @@ import UserList from "./components/UserList";
 
 
 function App() {
-    const marginTop = {
-        marginTop: "20px"
-    }
-
     return (
         <Router>
             <NavigationBar/>
             <Container>
                 <Row className="mb-lg-5">
-                    <Col lg={12} style={marginTop}>
+                    <Col lg={12} className={"margin-top"}>
                         <Switch>
                             <Route path="/edit/:id" component={Movie}/>
                             <Route path="/list" component={MovieList}/>
