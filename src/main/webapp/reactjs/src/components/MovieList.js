@@ -13,24 +13,69 @@ import {
     faFastForward
 } from "@fortawesome/free-solid-svg-icons"
 import MovieToast from "./MovieToast";
+import "./Style.css"
 import {Link} from "react-router-dom";
 
 const MovieList = () => {
-
     const [state, setState] = useState({
         movies: [],
         currentPage: 1,
-        moviesPerPage: 5
+        moviesPerPage: 5,
+        totalPages: 1,
+        sort: {
+            sortedBy: "title",
+            sortedAsc: true
+        }
     })
+
+    const initialSortArrow = {
+        title: true,
+        genre: false,
+        rating: false,
+        director: false,
+        dateRelease: false,
+        runtime: false
+    }
+    const [sortArrow, setSortArrow] = useState(initialSortArrow)
+
+    const {movies, currentPage, moviesPerPage, sort, totalPages} = state
     const [showToastState, setShowToastState] = useState(false)
 
-    useEffect(() => {
-        axios.get("http://localhost:8080/api/movies")
+    const getPages = () => {
+        let sortDir = sort.sortedAsc ? "asc" : "desc"
+        axios.get("http://localhost:8080/api/movies/pages?page=" + currentPage
+        + "&size=" + moviesPerPage
+        + "&sort=" + sort.sortedBy + "," + sortDir)
             .then(res => res.data)
             .then(data => {
-                setState({...state, movies: data})
+                setState({...state,
+                    movies: data.content,
+                    totalPages: data.totalPages
+                })
             })
-    }, [state.movies.length])
+    }
+
+    const setSortData = async (sortBy) => {
+        initialSortArrow["title"] = false
+        initialSortArrow[sortBy] = true
+        setSortArrow(initialSortArrow)
+    }
+
+    const sortData = (sortedBy) => {
+        setSortData(sortedBy).then(() => {
+            setState({
+                ...state,
+                sort:{
+                    sortedBy: sortedBy,
+                    sortedAsc: !sort.sortedAsc
+                }
+            })
+        })
+    }
+
+    useEffect(() => {
+        getPages()
+    }, [currentPage, sort])
 
     const onClickDeleteMovie = (movieId) => {
         axios.delete("http://localhost:8080/api/movies/" + movieId)
@@ -39,23 +84,10 @@ const MovieList = () => {
                 if(data != null) {
                     setShowToastState(true);
                     setTimeout(() => setShowToastState(false), 3000)
+                    getPages()
                 }
             })
 
-    }
-
-    const {movies, currentPage, moviesPerPage} = state
-
-    const lastIndex = currentPage * moviesPerPage
-    const firstIndex = lastIndex - moviesPerPage
-    const totalPages = Math.ceil(movies.length / moviesPerPage)
-
-    const pageNumCss = {
-        width: "45px",
-        border: "1px solid #17A2B8",
-        color: "#17A2B8",
-        textAlign: "center",
-        fontWeight: "bold"
     }
 
     const firstPage = () => {
@@ -67,16 +99,22 @@ const MovieList = () => {
     }
 
     const changePage = ev => {
+        if(ev.target.value.match(/\D/g) != null) {
+            ev.target.value.replace(/\D/g, "")
+            return
+        }
         setState({...state, currentPage: ev.target.value})
     }
 
     const nextPage = () => {
-        setState({...state, currentPage: currentPage + 1})
+        setState({...state, currentPage: state.currentPage + 1})
     }
 
     const lastPage = () => {
         setState({...state, currentPage: totalPages})
     }
+
+    const sortArrowDirection = sort.sortedAsc ? "arrow-down" : "arrow-up"
 
     return (
         <div>
@@ -88,17 +126,18 @@ const MovieList = () => {
             <Card className="bg-dark text-white border border-dark">
                 <Card.Header>
                     <FontAwesomeIcon className="mr-2" icon={faList}/>Movie List
+
                 </Card.Header>
                 <Card.Body>
                     <Table striped bordered hover variant="dark">
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Genre</th>
-                            <th>Rating</th>
-                            <th>Director</th>
-                            <th>Date Release</th>
-                            <th>Runtime</th>
+                            <th onClick={() => sortData("title")}>Title<div className={`arrow ${sortArrow.title ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
+                            <th onClick={() => sortData("genre")}>Genre<div className={`arrow ${sortArrow.genre ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
+                            <th onClick={() => sortData("rating")}>Rating<div className={`arrow ${sortArrow.rating ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
+                            <th onClick={() => sortData("director")}>Director<div className={`arrow ${sortArrow.director ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
+                            <th onClick={() => sortData("dateRelease")}>Date Release<div className={`arrow ${sortArrow.dateRelease ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
+                            <th onClick={() => sortData("runtime")}>Runtime<div className={`arrow ${sortArrow.runtime ? "enable-arrow" : "disable-arrow"} ${sortArrowDirection}`}/></th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -107,7 +146,7 @@ const MovieList = () => {
                             state.length === 0 ?
                                 <tr><td colSpan={7}>No movies available.</td></tr>
                                 :
-                                movies.slice(firstIndex, lastIndex).map(movie => (
+                                movies.map(movie => (
                                     <tr key={movie.id}>
                                         <td>
                                             <Image
@@ -143,19 +182,19 @@ const MovieList = () => {
                     <div style={{float: "right"}}>
                         <InputGroup size="sm">
                             <InputGroup.Prepend>
-                                <Button type="button" variant="outline-info" disabled={currentPage === 1 } onClick={firstPage}>
+                                <Button type="button" variant="outline-info" disabled={currentPage === 1} onClick={firstPage}>
                                     <FontAwesomeIcon icon={faFastBackward} /> First
                                 </Button>
-                                <Button type="button" variant="outline-info" disabled={currentPage === 1 } onClick={prevPage}>
+                                <Button type="button" variant="outline-info" disabled={currentPage === 1} onClick={prevPage}>
                                     <FontAwesomeIcon icon={faStepBackward} /> Prev
                                 </Button>
                             </InputGroup.Prepend>
-                            <FormControl style={pageNumCss} className={"bg-dark"} value={currentPage} onChange={changePage}/>
+                            <FormControl className={"bg-dark page-num"} value={currentPage} onChange={changePage}/>
                             <InputGroup.Append>
-                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages } onClick={nextPage}>
+                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages} onClick={nextPage}>
                                     <FontAwesomeIcon icon={faStepForward} /> Next
                                 </Button>
-                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages } onClick={lastPage}>
+                                <Button type="button" variant="outline-info" disabled={currentPage === totalPages} onClick={lastPage}>
                                     <FontAwesomeIcon icon={faFastForward} /> Last
                                 </Button>
                             </InputGroup.Append>

@@ -3,6 +3,7 @@ import axios from 'axios'
 import {Button, Card, FormControl, InputGroup, Table} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFastBackward, faFastForward, faStepBackward, faStepForward, faUsers} from "@fortawesome/free-solid-svg-icons";
+import "./Style.css"
 
 const UserList = () => {
 
@@ -26,14 +27,6 @@ const UserList = () => {
     const firstIndex = lastIndex - usersPerPage
     const currentUsers = users.slice(firstIndex, lastIndex)
     const totalPages = users.length / usersPerPage
-
-    const pageNumCss = {
-        width: "45px",
-        border: "1px solid #17A2B8",
-        color: "#17A2B8",
-        textAlign: "center",
-        fontWeight: "bold"
-    }
 
     const firstPage = () => {
         setState({...state, currentPage: 1})
@@ -104,7 +97,7 @@ const UserList = () => {
                                     <FontAwesomeIcon icon={faStepBackward} /> Prev
                                 </Button>
                             </InputGroup.Prepend>
-                            <FormControl style={pageNumCss} className={"bg-dark"} value={currentPage} onChange={changePage}/>
+                            <FormControl className={"bg-dark page-num"} value={currentPage} onChange={changePage}/>
                             <InputGroup.Append>
                                 <Button type="button" variant="outline-info" disabled={currentPage === totalPages } onClick={nextPage}>
                                     <FontAwesomeIcon icon={faStepForward} /> Next

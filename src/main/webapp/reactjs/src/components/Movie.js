@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 
-import "./Movie.css"
+import "./Style.css"
 
 
 import {Card, Form, Button, Col} from "react-bootstrap";
@@ -25,6 +26,7 @@ const Movie = (props) => {
 
     const [state, setState] = useState(initialState)
     const [toastShowState, setToastShowState] = useState(false)
+    const history = useHistory()
 
     const movie = {
         title: state.title,
@@ -56,16 +58,17 @@ const Movie = (props) => {
         axios.post("http://localhost:8080/api/movies", movie)
             .then(res => {
                 if (res.data != null) {
-                    setToastShowState(true);
-                    setTimeout(() => setToastShowState(false), 3000)
+                    setToastShowState(true)
+                    setTimeout(() => {
+                        setToastShowState(false)
+                        history.push("/list")
+                    }, 1500)
                 }
             })
-        resetMovie()
     }
 
-    const updateMovie = ev => {
+    const UpdateMovie = ev => {
         ev.preventDefault()
-
         const putMovie = {
             id: state.id,
             title: state.title,
@@ -78,14 +81,17 @@ const Movie = (props) => {
             rating: state.rating
         }
 
-        axios.put("http://localhost:8080/api/movies/" + putMovie.id, putMovie)
+        axios.put("http://localhost:8080/api/movies/", putMovie)
             .then(res => {
                 if (res.data != null) {
                     setToastShowState(true);
-                    setTimeout(() => setToastShowState(false), 3000)
+                    setTimeout(() => {
+                        setToastShowState(false)
+                        history.push("/list")
+                    }, 1500)
+                    //
                 }
             })
-        resetMovie()
     }
 
     const resetMovie = () => {
@@ -100,12 +106,12 @@ const Movie = (props) => {
         <div>
             <MovieToast
                 show={toastShowState}
-                message= {"Movie Saved Successfully."}
+                message= {`Movie ${state.id !== "" ? 'Updated' : 'Saved'} Successfully.`}
                 type={ "success"}
             />
 
             <Card className="bg-dark text-white border border-dark">
-            <Form onReset={resetMovie} onSubmit={state.id !== "" ? updateMovie : submitMovie} id="movieFormId">
+            <Form onReset={resetMovie} onSubmit={state.id !== "" ? UpdateMovie : submitMovie} id="movieFormId">
                 <Card.Header>
                     <FontAwesomeIcon className="mr-2" icon={state.id !== "" ? faEdit : faPlusSquare}/>{state.id !== "" ? "Update Movie" : "Add New Movie"}
                 </Card.Header>
