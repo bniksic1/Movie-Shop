@@ -42,10 +42,17 @@ const MovieList = () => {
     const [showToastState, setShowToastState] = useState(false)
 
     const getPages = () => {
+        let searchQuery = new URLSearchParams(window.location.search).get('search')
+        if(searchQuery == null)
+            searchQuery = ""
+
         let sortDir = sort.sortedAsc ? "asc" : "desc"
-        axios.get("http://localhost:8080/api/movies/pages?page=" + currentPage
-        + "&size=" + moviesPerPage
-        + "&sort=" + sort.sortedBy + "," + sortDir)
+
+        axios.get("http://localhost:8080/api/movies/options?" +
+                "search=" +  searchQuery + "&" +
+                "page=" + currentPage + "&" +
+                "size=" + moviesPerPage + "&" +
+                "sort=" + sort.sortedBy + "," + sortDir)
             .then(res => res.data)
             .then(data => {
                 setState({...state,
@@ -59,6 +66,7 @@ const MovieList = () => {
         initialSortArrow["title"] = false
         initialSortArrow[sortBy] = true
         setSortArrow(initialSortArrow)
+        // initialSortArrow[sortBy] = false
     }
 
     const sortData = (sortedBy) => {
@@ -75,7 +83,7 @@ const MovieList = () => {
 
     useEffect(() => {
         getPages()
-    }, [currentPage, sort])
+    }, [currentPage, sort, window.location.search])
 
     const onClickDeleteMovie = (movieId) => {
         axios.delete("http://localhost:8080/api/movies/" + movieId)

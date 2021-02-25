@@ -1,8 +1,17 @@
 import React from 'react'
+import {useHistory} from 'react-router-dom'
 import {Navbar, Nav, FormControl, Button, Form, Image} from 'react-bootstrap'
 import {Link} from "react-router-dom";
 
 const NavigationBar = () => {
+    const history = useHistory()
+
+    const handleSearch = (ev) => {
+        ev.preventDefault()
+        const searchQuery = document.getElementById("input").value
+        history.push("/list?search=" + searchQuery)
+    }
+
     return (
         <Navbar bg="dark" variant="dark">
             <Link to={""} className="navbar-brand">
@@ -25,8 +34,8 @@ const NavigationBar = () => {
                 </Link>
             </Nav>
             <Form inline>
-                <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                <Button variant="outline-info">Search</Button>
+                <FormControl onKeyPress={(ev) => ev.charCode === 13 && handleSearch(ev)} id="input" type="text" placeholder="Search" className="mr-sm-2" />
+                <Button variant="outline-info" onClick={handleSearch}>Search</Button>
             </Form>
         </Navbar>
     )
