@@ -1,11 +1,18 @@
 package com.example.demo;
 
+import lombok.*;
+
 import javax.persistence.*;
 
 import java.sql.Date;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 @Entity(name = "Movie")
 public class Movie {
     @Id
@@ -77,105 +84,4 @@ public class Movie {
 
     )
     private Integer runtime;
-
-    public Movie(String title,String genre, Integer rating, String director, Integer runtime, Date dateRelease, String description, String imgCoverLink) {
-        this.rating = rating;
-        this.title = title;
-        this.genre = genre;
-        this.dateRelease = dateRelease;
-        this.description = description;
-        this.imgCoverLink = imgCoverLink;
-        this.director = director;
-        this.runtime = runtime;
-    }
-
-    public Movie() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public Date getDateRelease() {
-        return dateRelease;
-    }
-
-    public void setDateRelease(Date dateRelease) {
-        this.dateRelease = dateRelease;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImgCoverLink() {
-        return imgCoverLink;
-    }
-
-    public void setImgCoverLink(String imgCoverLink) {
-        this.imgCoverLink = imgCoverLink;
-    }
-
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public Integer getRuntime() {
-        return runtime;
-    }
-
-    public void setRuntime(Integer runtime) {
-        this.runtime = runtime;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", genre='" + genre + '\'' +
-                ", dateRelease='" + dateRelease + '\'' +
-                ", director='" + director + '\'' +
-                ", description='" + description + '\'' +
-                ", imgCoverLink='" + imgCoverLink + '\'' +
-                ", rating=" + rating +
-                ", runtime=" + runtime +
-                '}';
-    }
 }
