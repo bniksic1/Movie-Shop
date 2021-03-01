@@ -5,7 +5,7 @@ const Welcome = () => {
     return (
         <div>
             <Jumbotron className="bg-dark text-white">
-                <h1>Welcome to Movie Shop</h1>
+                <h1>Welcome to Movie Store</h1>
                 <blockquote className="blockquote">
                     <p>
                         When you realize you want to spend the rest of your life with somebody, you want the rest of your life to start as soon as possible.

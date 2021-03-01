@@ -1,6 +1,9 @@
 import React from "react"
 import './App.css'
 
+import { Provider } from 'react-redux';
+import store from "./services/store";
+
 import {Container, Row, Col} from "react-bootstrap"
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
@@ -20,11 +23,11 @@ function App() {
                 <Row className="mb-lg-5">
                     <Col lg={12} className={"margin-top"}>
                         <Switch>
-                            <Route path="/edit/:id" component={Movie}/>
-                            <Route path="/list" component={MovieList}/>
-                            <Route path="/add" component={Movie}/>
-                            <Route path="/users" component={UserList}/>
-                            <Route path="/" component={Welcome}/>
+                            <Route exact path="/edit/:id" component={Movie}/>
+                            <Route exact path="/list" component={MovieList}/>
+                            <Route exact path="/add" component={Movie}/>
+                            <Route exact path="/users" component={() => <Provider store={store}> <UserList /> </Provider>}/>
+                            <Route exact path="/" component={Welcome}/>
                         </Switch>
                     </Col>
                 </Row>

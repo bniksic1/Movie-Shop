@@ -20,7 +20,7 @@ const NavigationBar = () => {
                     width="20"
                     className="mr-1"
                 />
-                Movie Shop
+                Movie Store
             </Link>
             <Nav className="mr-auto">
                 <Link to={"/add"} className="nav-link">
