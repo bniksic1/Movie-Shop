@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
+import {Link} from "react-router-dom";
 import axios from 'axios'
 
-import "./Style.css"
-
+import {connect} from 'react-redux';
+import {saveMovie} from '../services/movie/movieActions';
 
 import {Card, Form, Button, Col} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faList, faPlusSquare, faSave, faUndo, faEdit} from "@fortawesome/free-solid-svg-icons";
+
 import MovieToast from "./MovieToast";
-import {Link} from "react-router-dom";
+import "./Style.css"
 
 const Movie = (props) => {
     const initialState = {
@@ -53,18 +55,28 @@ const Movie = (props) => {
             })
     }, [props.match.params.id])
 
-    const submitMovie = ev => {
-        ev.preventDefault()
-        axios.post("http://localhost:8080/api/movies", movie)
-            .then(res => {
-                if (res.data != null) {
-                    setToastShowState(true)
-                    setTimeout(() => {
-                        setToastShowState(false)
-                        history.push("/list")
-                    }, 1500)
-                }
-            })
+    const submitMovie = async ev => {
+        ev.preventDefault();
+
+        await props.saveMovie(movie);
+        if (props.movieData.movie != null) {
+            setToastShowState(true)
+            setTimeout(() => {
+                setToastShowState(false)
+                history.push("/list")
+            }, 1500)
+        }
+
+        // axios.post("http://localhost:8080/api/movies", movie)
+        //     .then(res => {
+        //         if (res.data != null) {
+        //             setToastShowState(true)
+        //             setTimeout(() => {
+        //                 setToastShowState(false)
+        //                 history.push("/list")
+        //             }, 1500)
+        //         }
+        //     })
     }
 
     const UpdateMovie = ev => {
@@ -255,4 +267,16 @@ const Movie = (props) => {
 );
 };
 
-export default Movie;
+const mapStateToProps = state => (
+    {
+        movieData : state.movie
+    }
+);
+
+const mapDispatchToProps = dispatch => (
+    {
+        saveMovie : movie => dispatch(saveMovie(movie))
+    }
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Movie);

@@ -1,9 +1,6 @@
 import React from "react"
 import './App.css'
 
-import { Provider } from 'react-redux';
-import store from "./services/store";
-
 import {Container, Row, Col} from "react-bootstrap"
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
 
@@ -26,7 +23,7 @@ function App() {
                             <Route exact path="/edit/:id" component={Movie}/>
                             <Route exact path="/list" component={MovieList}/>
                             <Route exact path="/add" component={Movie}/>
-                            <Route exact path="/users" component={() => <Provider store={store}> <UserList /> </Provider>}/>
+                            <Route exact path="/users" component={UserList}/>
                             <Route exact path="/" component={Welcome}/>
                         </Switch>
                     </Col>

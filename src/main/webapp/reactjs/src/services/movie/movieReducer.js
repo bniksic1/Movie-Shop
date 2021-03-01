@@ -1,19 +1,19 @@
-import * as TYPES from './userTypes';
+import * as TYPES from './movieTypes';
 
 const initialState = {
-    users: [],
+    movie: null,
     error: ""
 };
 
 const reducer = (state = initialState, action) => {
-    if(action.type === TYPES.FETCH_USER_SUCCESS)
+    if(action.type === TYPES.SAVE_MOVIE_SUCCESS)
         return {
-            users: action.payload,
+            movie: action.payload,
             error: ""
         };
-    else if(action.type === TYPES.FETCH_USER_FAILURE)
+    else if(action.type === TYPES.SAVE_MOVIE_FAILURE)
         return {
-            users: [],
+            movie: null,
             error: action.payload
         };
     else
