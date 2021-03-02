@@ -1,11 +1,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/bniksic1/Movie-Shop">
+  <a href="https://github.com/bniksic1/MovieStore">
     <img src="https://www.iconarchive.com/download/i61405/hadezign/hobbies/Movies.ico" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Movie shop</h3>
+  <h3 align="center">Movie store</h3>
 </p>
 
 
