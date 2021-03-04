@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
-import {Row, Col, Card, Form, InputGroup, FormControl, Button} from "react-bootstrap";
+import React, {useEffect, useState} from 'react';
+import {Row, Col, Card, Form, InputGroup, FormControl, Button, Alert} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEnvelope, faLock, faSignInAlt, faUndo} from "@fortawesome/free-solid-svg-icons";
+import {authenticateUser} from "../services/user/auth/authActions";
+import {connect} from 'react-redux';
 
-const Login = () => {
+const Login = (props) => {
     const initialState = {
         email: '',
-        password: ''
+        password: '',
+        error: ''
     };
     const [state, setState] = useState(initialState);
-    const {email, password} = state;
+    const [isFirstMount, setIsFirstMount] = useState(true);
+    const {email, password, error} = state;
 
     const resetLoginForm = () => {
         setState(initialState);
@@ -22,9 +26,28 @@ const Login = () => {
         });
     }
 
+    const validateUser = () => {
+        props.authenticateUser(email, password);
+    }
+
+    useEffect(() => {
+        if(isFirstMount) {
+            setIsFirstMount(false);
+            return;
+        }
+
+        if(props.login.isLoggedIn)
+            return props.history.push("/");
+        else{
+            resetLoginForm();
+            setState({...state, error: 'Invalid email and password'});
+        }
+    }, [props.login.isLoggedIn]);
+
     return (
         <Row className="justify-content-md-center">
             <Col xs={5}>
+                {error.length && <Alert variant="danger">{error}</Alert>}
                 <Card className="border border-dark bg-dark text-white">
                     <Card.Header>
                         <FontAwesomeIcon icon={faSignInAlt} />{' '}Login
@@ -58,7 +81,7 @@ const Login = () => {
                         </Form.Row>
                     </Card.Body>
                     <Card.Footer style={{textAlign: 'right'}}>
-                        <Button size="sm" type="button" variant="success"
+                        <Button size="sm" type="button" variant="success" onClick={validateUser}
                                 disabled={!email.length || !password.length}>
                             <FontAwesomeIcon icon={faSignInAlt}/> Login
                         </Button>
@@ -74,4 +97,12 @@ const Login = () => {
     );
 };
 
-export default Login;
+const mapStateToProps = state => ({
+        login: state.auth
+});
+
+const mapDispatchToProps = dispatch => ({
+    authenticateUser: (email, password) => dispatch(authenticateUser(email, password))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

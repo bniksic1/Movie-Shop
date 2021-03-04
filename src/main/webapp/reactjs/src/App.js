@@ -29,6 +29,7 @@ function App() {
                             <Route exact path="/edit/:id" component={Movie}/>
                             <Route exact path="/register" component={Register}/>
                             <Route exact path="/login" component={Login}/>
+                            <Route exact path="/logout" component={Welcome}/>
                         </Switch>
                     </Col>
                 </Row>
