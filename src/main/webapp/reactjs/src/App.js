@@ -10,6 +10,8 @@ import Footer from "./components/Footer";
 import Movie from "./components/Movie";
 import MovieList from "./components/MovieList";
 import UserList from "./components/UserList";
+import Register from "./components/Register";
+import Login from "./components/Login";
 
 
 function App() {
@@ -20,11 +22,13 @@ function App() {
                 <Row className="mb-lg-5">
                     <Col lg={12} className={"margin-top"}>
                         <Switch>
-                            <Route exact path="/edit/:id" component={Movie}/>
-                            <Route exact path="/list" component={MovieList}/>
-                            <Route exact path="/add" component={Movie}/>
-                            <Route exact path="/users" component={UserList}/>
                             <Route exact path="/" component={Welcome}/>
+                            <Route exact path="/users" component={UserList}/>
+                            <Route exact path="/add" component={Movie}/>
+                            <Route exact path="/list" component={MovieList}/>
+                            <Route exact path="/edit/:id" component={Movie}/>
+                            <Route exact path="/register" component={Register}/>
+                            <Route exact path="/login" component={Login}/>
                         </Switch>
                     </Col>
                 </Row>

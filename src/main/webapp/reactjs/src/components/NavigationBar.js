@@ -2,6 +2,8 @@ import React from 'react'
 import {useHistory} from 'react-router-dom'
 import {Navbar, Nav, FormControl, Button, Form, Image} from 'react-bootstrap'
 import {Link} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSignInAlt, faUserPlus} from "@fortawesome/free-solid-svg-icons";
 
 const NavigationBar = () => {
     const history = useHistory()
@@ -34,9 +36,13 @@ const NavigationBar = () => {
                 </Link>
             </Nav>
             <Form inline>
-                <FormControl onKeyPress={(ev) => ev.charCode === 13 && handleSearch(ev)} id="input" type="text" placeholder="Search" className="mr-sm-2" />
                 <Button variant="outline-info" onClick={handleSearch}>Search</Button>
+                <FormControl onKeyPress={(ev) => ev.charCode === 13 && handleSearch(ev)} id="input" type="text" placeholder="Search" className="ml-2" />
             </Form>
+            <Nav className="navbar-right">
+                <Link to={"register"} className="nav-link ml-3"><FontAwesomeIcon icon={faUserPlus}/> Register</Link>
+                <Link to={"login"} className="nav-link"><FontAwesomeIcon icon={faSignInAlt}/> Login</Link>
+            </Nav>
         </Navbar>
     )
 }
