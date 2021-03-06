@@ -22,7 +22,10 @@ List of movies contains implementation of backend sorting and pagination via JPA
 
 ![Alt text](src/main/webapp/reactjs/public/images/presentation2.png)
 
-Frontend uses react functional components with hooks. Every frontend action is asynchrone and doesn't run reloading page. 
+Frontend uses react functional components with hooks. Every frontend action is asynchrone and doesn't run reloading page.
+
+Application has spring boot security support with backend JWT authentication. 
+![Alt text](src/main/webapp/reactjs/public/images/presentation3.png) 
 
 ### Built With
 
@@ -30,6 +33,8 @@ This section is list of languages and frameworks that project uses:
 * [Java]()
 * [Spring Boot]()
     * [Spring Boot Web]()
+    * [Web Security]()
+    * [JWT Auth]()
     * [JPA Repository - Hibernate]()
     * [PostgreSQL JDBC]()
     * [Lombok]()

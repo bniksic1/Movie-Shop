@@ -1,14 +1,18 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {Navbar, Nav, FormControl, Button, Form, Image} from 'react-bootstrap'
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSignInAlt, faSignOutAlt, faUserPlus} from "@fortawesome/free-solid-svg-icons";
+import {
+    faSearch,
+    faSignInAlt,
+    faSignOutAlt,
+    faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import {connect} from "react-redux";
 import {logoutUser} from "../services/user/auth/authActions";
 
 const NavigationBar = (props) => {
-    const [isFirstMount, setIsFirstMount] = useState(true);
     const history = useHistory()
 
     const handleSearch = (ev) => {
@@ -38,8 +42,8 @@ const NavigationBar = (props) => {
                 </Link>
             </Nav>
             <Form inline>
-                <Button variant="outline-info" onClick={handleSearch}>Search</Button>
-                <FormControl onKeyPress={(ev) => ev.charCode === 13 && handleSearch(ev)} id="input" type="text" placeholder="Title Searching" className="ml-2"/>
+                <Button variant="outline-info" onClick={handleSearch}><FontAwesomeIcon icon={faSearch}/></Button>
+                <FormControl onKeyPress={(ev) => ev.charCode === 13 && handleSearch(ev)} id="input" type="text" placeholder="Title Searching" className="ml-1 bg-dark border-info text-info"/>
             </Form>
             <Nav>
                 <Link to={"/logout"} className="nav-link ml-2" onClick={props.logoutUser}>

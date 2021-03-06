@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Row, Col, Card, Form, InputGroup, FormControl, Button, Alert} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEnvelope, faLock, faSignInAlt, faUndo} from "@fortawesome/free-solid-svg-icons";
+import {faEnvelope, faEye, faLock, faSignInAlt, faUndo} from "@fortawesome/free-solid-svg-icons";
 import {authenticateUser} from "../services/user/auth/authActions";
 import {connect} from 'react-redux';
+import './Style.css';
 
 const Login = (props) => {
     const initialState = {
@@ -12,7 +13,9 @@ const Login = (props) => {
         error: ''
     };
     const [state, setState] = useState(initialState);
+    const [isPasswordVisible, setPasswordVisibility] = useState(false);
     const [isFirstMount, setIsFirstMount] = useState(true);
+    const [inputChange, setInputChange] = useState(true);
     const {email, password, error} = state;
 
     const resetLoginForm = () => {
@@ -28,6 +31,11 @@ const Login = (props) => {
 
     const validateUser = () => {
         props.authenticateUser(email, password);
+        setInputChange(!inputChange);
+    }
+
+    const handlePasswordVisibility = () => {
+        setPasswordVisibility(!isPasswordVisible);
     }
 
     useEffect(() => {
@@ -42,7 +50,7 @@ const Login = (props) => {
             resetLoginForm();
             setState({...state, error: 'Invalid email and password'});
         }
-    }, [props.login.isLoggedIn]);
+    }, [inputChange, props.login.isLoggedIn]);
 
     return (
         <Row className="justify-content-md-center">
@@ -61,21 +69,41 @@ const Login = (props) => {
                                             <FontAwesomeIcon icon={faEnvelope}/>
                                         </InputGroup.Text>
                                     </InputGroup.Prepend>
-                                    <FormControl required autoComplete="off" type="text" name="email" value={email} style={{width: "370px"}}
-                                        className="bg-dark text-white" placeholder="Enter Email Address" onChange={inputChangeHandle}/>
+                                    <FormControl
+                                        required
+                                        autoComplete="off"
+                                        type="text"
+                                        name="email"
+                                        value={email}
+                                        style={{width: "370px"}}
+                                        className="bg-dark text-white"
+                                        placeholder="Enter Email Address"
+                                        onChange={inputChangeHandle}
+                                    />
                                 </InputGroup>
                             </Form.Group>
                         </Form.Row>
                         <Form.Row>
                             <Form.Group>
                                 <InputGroup>
-                                    <InputGroup.Prepend>
-                                        <InputGroup.Text>
-                                            <FontAwesomeIcon icon={faLock}/>
-                                        </InputGroup.Text>
-                                    </InputGroup.Prepend>
-                                    <FormControl required autoComplete="off" type="password" name="password" value={password} style={{width: "370px"}}
-                                                 className="bg-dark text-white " placeholder="Enter Password" onChange={inputChangeHandle}/>
+                                    <div className="password">
+                                        <InputGroup.Prepend>
+                                            <InputGroup.Text>
+                                                <FontAwesomeIcon icon={faLock}/>
+                                            </InputGroup.Text>
+                                        </InputGroup.Prepend>
+                                        <FormControl
+                                            required
+                                            autoComplete="off"
+                                            type={isPasswordVisible ? 'text' : 'password'}
+                                            name="password"
+                                            value={password} style={{width: "370px"}}
+                                            className="bg-dark text-white "
+                                            placeholder="Enter Password"
+                                            onChange={inputChangeHandle}
+                                        />
+                                        <span className="faeye-icon" onClick={handlePasswordVisibility}><FontAwesomeIcon icon={faEye} className={isPasswordVisible ? 'text-info' : ''} /></span>
+                                    </div>
                                 </InputGroup>
                             </Form.Group>
                         </Form.Row>

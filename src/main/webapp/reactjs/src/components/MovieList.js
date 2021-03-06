@@ -66,7 +66,6 @@ const MovieList = () => {
         initialSortArrow["title"] = false
         initialSortArrow[sortBy] = true
         setSortArrow(initialSortArrow)
-        // initialSortArrow[sortBy] = false
     }
 
     const sortData = (sortedBy) => {

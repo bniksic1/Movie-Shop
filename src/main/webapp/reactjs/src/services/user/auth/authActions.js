@@ -1,4 +1,5 @@
 import * as TYPES from './authTypes';
+import axios from "axios";
 
 const loginRequest = () => ({
     type: TYPES.LOGIN_REQUEST
@@ -18,19 +19,31 @@ const failure = isLoggedIn => ({
     payload: isLoggedIn
 });
 
-export const authenticateUser = (email, password) => (
-    dispatch => {
+export const authenticateUser = (email, password) => {
+    const credentials = {
+        email: email,
+        password: password
+    };
+
+    return dispatch => {
         dispatch(loginRequest());
-        if(email === 'test' && password === 'test')
-            dispatch(success(true));
-        else
-            dispatch(failure(false));
+        axios.post("http://localhost:8080/user/authenticate", credentials)
+            .then(res => {
+                localStorage.setItem('jwt', res.data.token);
+                axios.defaults.headers.common['Authorization'] = res.data.token;
+                dispatch(success(true));
+            })
+            .catch(err => {
+                dispatch(failure(false));
+            })
     }
-);
+};
 
 export const logoutUser = () => (
     dispatch => {
         dispatch(logoutRequest());
+        localStorage.removeItem('jwt');
+        delete axios.defaults.headers.common['Authorization'];
         dispatch(success(false));
     }
 );

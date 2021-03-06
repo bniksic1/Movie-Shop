@@ -1,9 +1,15 @@
 package com.example.demo;
 
+import com.example.demo.domain.Role;
+import com.example.demo.domain.User;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -14,10 +20,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class DemoApplication{
+public class DemoApplication implements CommandLineRunner {
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		if(roleRepository.findAll().isEmpty()){
+			roleRepository.saveAndFlush(new Role(1L, "admin"));
+			roleRepository.saveAndFlush(new Role(2L, "user"));
+		}
+
+		if(userRepository.findAll().isEmpty()){
+			User user1 = new User();
+			user1.setEmail("test@user.com");
+			user1.setName("Test User");
+			user1.setMobile("97874565452");
+			user1.setRole(roleRepository.findById(2L).get());
+			user1.setPassword(new BCryptPasswordEncoder().encode("testuser"));
+			userRepository.saveAndFlush(user1);
+
+			User user2 = new User();
+			user2.setEmail("test@admin.com");
+			user2.setName("Test Admin");
+			user2.setMobile("97874565452");
+			user2.setRole(roleRepository.findById(1L).get());
+			user2.setPassword(new BCryptPasswordEncoder().encode("testadmin"));
+			userRepository.saveAndFlush(user2);
+		}
 	}
 
 //	@Bean

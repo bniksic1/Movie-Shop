@@ -251,8 +251,8 @@ const Movie = (props) => {
                 </Card.Footer>
             </Form>
         </Card>
-</div>
-);
+    </div>
+    );
 };
 
 export default Movie;
